@@ -1,5 +1,6 @@
 package com.neoris.santiago.controller;
 
+import com.neoris.santiago.dto.CuentaDto;
 import com.neoris.santiago.entity.CuentaEntity;
 import com.neoris.santiago.service.CuentaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class CuentaController {
     private CuentaService cuentaService;
 
     @PostMapping("/crear")
-    private ResponseEntity saveCuenta(@Valid @RequestBody CuentaEntity cuentaDto, BindingResult bindingResult){
+    public ResponseEntity saveCuenta(@Valid @RequestBody CuentaEntity cuentaDto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST.getReasonPhrase(), HttpStatus.BAD_REQUEST);
         }
@@ -27,7 +28,7 @@ public class CuentaController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity getCuenta(@PathVariable("id") Integer idCuenta){
+    public ResponseEntity getCuenta(@PathVariable("id") Integer idCuenta){
         try {
             return new ResponseEntity<>(cuentaService.obtenerCuentaPorId(idCuenta), HttpStatus.OK);
         }catch (Exception e){
@@ -36,7 +37,7 @@ public class CuentaController {
     }
 
     @PutMapping
-    private ResponseEntity putCuenta(@Valid @RequestBody CuentaEntity cuenta, BindingResult bindingResult){
+    public ResponseEntity putCuenta(@Valid @RequestBody CuentaDto cuenta, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("error en la peticion", HttpStatus.BAD_REQUEST);
         }
@@ -45,7 +46,7 @@ public class CuentaController {
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity deleteCuenta(@PathVariable Integer id){
+    public ResponseEntity deleteCuenta(@PathVariable Integer id){
         if (cuentaService.eliminarCuenta(id)){
             return new ResponseEntity("Cuenta eliminada con exito", HttpStatus.OK);
         }else{

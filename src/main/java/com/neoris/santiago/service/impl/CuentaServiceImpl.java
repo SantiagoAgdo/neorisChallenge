@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Optional;
 
@@ -25,6 +26,8 @@ public class CuentaServiceImpl implements CuentaService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    private static final String USER_NOT_FOUND = "NO SE ENCONTRO USUARIO ";
 
     @Override
     public void crearCuenta(CuentaEntity cuentaDto) throws ApiException {
@@ -57,28 +60,30 @@ public class CuentaServiceImpl implements CuentaService {
         if(cuentaEntity.isPresent()){
             return modelMapper.map(cuentaEntity.get(), CuentaDto.class);
         }else{
-            throw new ApiException("NO se encuentro usuario", HttpStatus.OK);
+            throw new ApiException(USER_NOT_FOUND, HttpStatus.NO_CONTENT);
         }
     }
 
     @Override
-    public boolean editarCuenta(CuentaEntity cuenta) throws ApiException  {
-        Optional<CuentaEntity> cuentaEntity = cuentaRepository.findById(cuenta.getId());
-
-        if(cuentaEntity == null){
-            return false;
+    public boolean editarCuenta(CuentaDto cuenta) throws ApiException  {
+        if(!ObjectUtils.isEmpty(cuenta.getId())){
+            Optional<CuentaEntity> cuentaEntity = cuentaRepository.findById(cuenta.getId());
+            if(cuentaEntity.isPresent()){
+                Optional<ClienteEntity> clienteEntity = this.obtenerCliente(cuenta.getIdCliente());
+                if(clienteEntity.isPresent()){
+                    CuentaEntity cuentaEntityPersistir = modelMapper.map(cuenta, CuentaEntity.class);
+                    cuentaEntityPersistir.setCliente(clienteEntity.get());
+                    cuentaRepository.save(cuentaEntityPersistir);
+                    return true;
+                }else{
+                    throw new ApiException( USER_NOT_FOUND + cuenta.getIdCliente() , HttpStatus.NO_CONTENT);
+                }
+            }else{
+                throw new ApiException( USER_NOT_FOUND + cuenta.getIdCliente() , HttpStatus.NO_CONTENT);
+            }
+        }else{
+            throw new ApiException( USER_NOT_FOUND + cuenta.getIdCliente() , HttpStatus.NO_CONTENT);
         }
-
-        Optional<CuentaEntity> cuentaDto = cuentaEntity;
-        cuentaDto.get().setId(cuenta.getId());
-        cuentaDto.get().setNumeroCuenta(cuenta.getNumeroCuenta());
-        cuentaDto.get().setTipoCuenta(cuenta.getTipoCuenta());
-        cuentaDto.get().setEstado(cuenta.getEstado());
-        cuentaDto.get().setSaldoInicial(cuenta.getSaldoInicial());
-        cuentaDto.get().setCliente(cuenta.getCliente());
-
-        crearCuenta(cuentaDto.get());
-        return true;
     }
 
 

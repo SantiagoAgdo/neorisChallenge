@@ -18,7 +18,7 @@ public class ClienteDto implements Serializable {
 
     @Valid
     @NotNull()
-    private PersonaDto persona;
+    private transient PersonaDto persona;
 
     @NotNull()
     @NotEmpty()

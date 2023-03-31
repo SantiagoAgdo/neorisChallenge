@@ -1,5 +1,6 @@
 package com.neoris.santiago.controller;
 
+import com.neoris.santiago.dto.MovimientoDto;
 import com.neoris.santiago.entity.MovimientoEntity;
 import com.neoris.santiago.service.MovimientoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,13 @@ public class MovimientoController {
     private MovimientoService movimientoService;
 
     @PostMapping("/crear")
-    private ResponseEntity saveMovimiento(@Valid @RequestBody MovimientoEntity movimientoDto, BindingResult bindingResult){
+    public ResponseEntity saveMovimiento(@Valid @RequestBody MovimientoEntity movimientoDto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("Error en Peticion", HttpStatus.BAD_REQUEST);
         }
         try {
             movimientoService.crearMovimiento(movimientoDto);
-            return  new ResponseEntity("Movimiento Creado con exito", HttpStatus.OK);
+            return  new ResponseEntity<>("Movimiento Creado con exito", HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("Error en la creacion de movimiento, vuelva a intentarlo", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -34,7 +35,7 @@ public class MovimientoController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity getMovimiento(@PathVariable("id") Integer idMovimiento){
+    public ResponseEntity getMovimiento(@PathVariable("id") Integer idMovimiento){
         try {
             return new ResponseEntity<>(movimientoService.obtenerMovimientoPorId(idMovimiento), HttpStatus.OK);
         }catch (Exception e){
@@ -43,31 +44,31 @@ public class MovimientoController {
     }
 
     @PutMapping
-    private ResponseEntity putMovimiento(@Valid @RequestBody MovimientoEntity movimientoDto, BindingResult bindingResult){
+    public ResponseEntity putMovimiento(@Valid @RequestBody MovimientoDto movimientoDto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("error en la peticion", HttpStatus.BAD_REQUEST);
         }
         movimientoService.editarMovimiento(movimientoDto);
-        return new ResponseEntity("Movimiento editado correctamente", HttpStatus.OK);
+        return new ResponseEntity<>("Movimiento editado correctamente", HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity deleteMovimiento(@PathVariable Integer id){
+    public ResponseEntity deleteMovimiento(@PathVariable Integer id){
         if (movimientoService.eliminarMovimiento(id)){
-            return new ResponseEntity("Movimiento eliminado con exito", HttpStatus.OK);
+            return new ResponseEntity<>("Movimiento eliminado con exito", HttpStatus.OK);
         }else{
-            return new ResponseEntity("Movimiento no pudo ser eliminado", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Movimiento no pudo ser eliminado", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/reportes")
-    private ResponseEntity gteReporte(@RequestParam(name = "fechainicial")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechainicial,
+    public ResponseEntity gteReporte(@RequestParam(name = "fechainicial")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechainicial,
                                       @RequestParam(name = "fechafinal")    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFinal,
                                       @RequestParam(name = "id") Integer id) {
         try {
-            return new ResponseEntity(movimientoService.obtenerReportePorFechas(fechainicial, fechaFinal, id), HttpStatus.OK);
+            return new ResponseEntity<>(movimientoService.obtenerReportePorFechas(fechainicial, fechaFinal, id), HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity("No se encontraron registros", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("No se encontraron registros", HttpStatus.FORBIDDEN);
         }
     }
 

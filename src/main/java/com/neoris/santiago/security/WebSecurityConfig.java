@@ -2,6 +2,7 @@ package com.neoris.santiago.security;
 
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @AllArgsConstructor
 public class WebSecurityConfig {
+
+    private static  final String pass = "admin";
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
@@ -41,7 +44,7 @@ public class WebSecurityConfig {
     UserDetailsService userDetailsService() {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User.withUsername("Admin")
-                .password(passwordEncoder().encode("admin"))
+                .password(passwordEncoder().encode(pass))
                 .roles()
                 .build());
         return manager;

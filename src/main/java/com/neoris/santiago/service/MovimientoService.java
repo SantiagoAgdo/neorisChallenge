@@ -7,14 +7,15 @@ import com.neoris.santiago.exception.ApiException;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface MovimientoService {
 
     void crearMovimiento(MovimientoEntity movimientoDto) throws ApiException;
 
-    MovimientoDto obtenerMovimientoPorId(Integer idMovimiento) throws ApiException;
+    Optional<MovimientoEntity> obtenerMovimientoPorId(Integer idMovimiento) throws ApiException;
 
-    boolean editarMovimiento(MovimientoEntity movimientoDto) throws ApiException;
+    boolean editarMovimiento(MovimientoDto movimientoDto) throws ApiException;
 
     boolean eliminarMovimiento(Integer id) throws ApiException;
 

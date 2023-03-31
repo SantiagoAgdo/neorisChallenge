@@ -9,7 +9,7 @@ public interface CuentaService {
 
     CuentaDto obtenerCuentaPorId(Integer idCuenta);
 
-    boolean editarCuenta(CuentaEntity cuenta);
+    boolean editarCuenta(CuentaDto cuenta);
 
     boolean eliminarCuenta(Integer id);
 }

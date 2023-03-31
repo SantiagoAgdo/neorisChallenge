@@ -6,10 +6,10 @@ import com.neoris.santiago.exception.ApiException;
 
 public interface ClienteService {
 
-    void crearCliente(ClienteEntity cliente) throws ApiException;
+    void crearCliente(ClienteDto cliente) throws ApiException;
     ClienteDto obtenerClientePorId(Integer idCliente) throws ApiException;
 
-    boolean editarCliente(ClienteEntity cliente) throws ApiException;
+    boolean editarCliente(ClienteDto cliente) throws ApiException;
 
     boolean eliminarCliente(Integer id) throws ApiException;
 }

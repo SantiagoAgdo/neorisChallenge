@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -59,32 +60,35 @@ public class MovimientoServiceImpl implements MovimientoService {
     }
 
     @Override
-    public MovimientoDto obtenerMovimientoPorId(Integer idMovimiento) throws ApiException {
+    public Optional<MovimientoEntity> obtenerMovimientoPorId(Integer idMovimiento) throws ApiException {
         Optional<MovimientoEntity> movimientoEntity = movimientosRepository.findById(idMovimiento);
         if(movimientoEntity.isPresent()){
-            return modelMapper.map(movimientoEntity.get(), MovimientoDto.class);
+            return movimientoEntity;
         }else{
-            throw new ApiException("Movimiento con ID no encontrado",HttpStatus.OK);
+            throw new ApiException("Movimiento con ID no encontrado - id: " + idMovimiento,HttpStatus.OK);
         }
     }
 
     @Override
-    public boolean editarMovimiento(MovimientoEntity movimiento) throws ApiException {
-        Optional<MovimientoEntity> movimientoEntity = movimientosRepository.findById(movimiento.getId());
-
-        if(movimientoEntity == null){
-            return false;
+    public boolean editarMovimiento(MovimientoDto movimiento) throws ApiException {
+        if(!ObjectUtils.isEmpty(movimiento.getId())){
+            Optional<MovimientoEntity> movimientoEntity = movimientosRepository.findById(movimiento.getId());
+            if(movimientoEntity.isPresent()){
+                Optional<CuentaEntity> cuentaEntity = this.obtenerCuentaPorId(movimiento.getIdCuenta());
+                if(cuentaEntity.isPresent()){
+                    MovimientoEntity movimientoEntityPersistir = modelMapper.map(movimiento, MovimientoEntity.class);
+                    movimientoEntityPersistir.setCuenta(cuentaEntity.get());
+                    movimientosRepository.save(movimientoEntityPersistir);
+                    return true;
+                }else{
+                    throw new ApiException( USER_NOT_FOUND + movimiento.getId() , HttpStatus.NO_CONTENT);
+                }
+            }else{
+                throw new ApiException( USER_NOT_FOUND + movimiento.getId() , HttpStatus.NO_CONTENT);
+            }
+        }else{
+            throw new ApiException( USER_NOT_FOUND + movimiento.getId() , HttpStatus.NO_CONTENT);
         }
-
-        Optional<MovimientoEntity> movimientoDto = movimientoEntity;
-        movimientoDto.get().setId(movimiento.getId());
-        movimientoDto.get().setTipoMovimiento(movimiento.getTipoMovimiento());
-        movimientoDto.get().setSaldo(movimiento.getSaldo());
-        movimientoDto.get().setValor(movimiento.getValor());
-        movimientoDto.get().setFecha(movimiento.getFecha());
-
-        crearMovimiento(movimientoDto.get());
-        return true;
     }
 
 
