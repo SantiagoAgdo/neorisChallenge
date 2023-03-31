@@ -1,7 +1,6 @@
 package com.neoris.santiago.controller;
 
 import com.neoris.santiago.dto.MovimientoDto;
-import com.neoris.santiago.entity.MovimientoEntity;
 import com.neoris.santiago.service.MovimientoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,12 +20,12 @@ public class MovimientoController {
     private MovimientoService movimientoService;
 
     @PostMapping("/crear")
-    public ResponseEntity saveMovimiento(@Valid @RequestBody MovimientoEntity movimientoDto, BindingResult bindingResult){
+    public ResponseEntity<?> saveMovimiento(@Valid @RequestBody MovimientoDto movimiento, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("Error en Peticion", HttpStatus.BAD_REQUEST);
         }
         try {
-            movimientoService.crearMovimiento(movimientoDto);
+            movimientoService.crearMovimiento(movimiento);
             return  new ResponseEntity<>("Movimiento Creado con exito", HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("Error en la creacion de movimiento, vuelva a intentarlo", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -35,7 +34,7 @@ public class MovimientoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getMovimiento(@PathVariable("id") Integer idMovimiento){
+    public ResponseEntity<?> getMovimiento(@PathVariable("id") Integer idMovimiento){
         try {
             return new ResponseEntity<>(movimientoService.obtenerMovimientoPorId(idMovimiento), HttpStatus.OK);
         }catch (Exception e){
@@ -44,7 +43,7 @@ public class MovimientoController {
     }
 
     @PutMapping
-    public ResponseEntity putMovimiento(@Valid @RequestBody MovimientoDto movimientoDto, BindingResult bindingResult){
+    public ResponseEntity<?> putMovimiento(@Valid @RequestBody MovimientoDto movimientoDto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("error en la peticion", HttpStatus.BAD_REQUEST);
         }
@@ -53,7 +52,7 @@ public class MovimientoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteMovimiento(@PathVariable Integer id){
+    public ResponseEntity<?> deleteMovimiento(@PathVariable Integer id){
         if (movimientoService.eliminarMovimiento(id)){
             return new ResponseEntity<>("Movimiento eliminado con exito", HttpStatus.OK);
         }else{
@@ -62,7 +61,7 @@ public class MovimientoController {
     }
 
     @GetMapping("/reportes")
-    public ResponseEntity gteReporte(@RequestParam(name = "fechainicial")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechainicial,
+    public ResponseEntity<?> gteReporte(@RequestParam(name = "fechainicial")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechainicial,
                                       @RequestParam(name = "fechafinal")    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFinal,
                                       @RequestParam(name = "id") Integer id) {
         try {

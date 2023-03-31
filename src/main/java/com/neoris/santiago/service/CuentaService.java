@@ -1,11 +1,10 @@
 package com.neoris.santiago.service;
 
 import com.neoris.santiago.dto.CuentaDto;
-import com.neoris.santiago.entity.CuentaEntity;
 
 public interface CuentaService {
 
-    void crearCuenta(CuentaEntity cuentaDto);
+    void crearCuenta(CuentaDto cuentaDto);
 
     CuentaDto obtenerCuentaPorId(Integer idCuenta);
 

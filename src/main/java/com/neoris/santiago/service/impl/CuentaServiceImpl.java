@@ -30,7 +30,7 @@ public class CuentaServiceImpl implements CuentaService {
     private static final String USER_NOT_FOUND = "NO SE ENCONTRO USUARIO ";
 
     @Override
-    public void crearCuenta(CuentaEntity cuentaDto) throws ApiException {
+    public void crearCuenta(CuentaDto cuentaDto) throws ApiException {
         if(this.obtenerCuenta(cuentaDto.getNumeroCuenta()).isPresent()){
             throw new ApiException("Ya existe una cuenta con este mismo numero de cuenta", HttpStatus.OK);
         }else{

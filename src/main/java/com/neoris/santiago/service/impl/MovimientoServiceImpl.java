@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -40,16 +41,16 @@ public class MovimientoServiceImpl implements MovimientoService {
 
 
     @Override
-    public void crearMovimiento(MovimientoEntity movimientoDto) throws ApiException {
+    public void crearMovimiento(MovimientoDto movimientoDto) throws ApiException {
         Optional<CuentaEntity> cuentaEntity = this.obtenerCuentaPorId(movimientoDto.getId());
         if(cuentaEntity.isPresent()){
             if(movimientoDto.getTipoMovimiento().toUpperCase().equals("CREDITO")){
-                movimientoDto.setSaldo(movimientoDto.getSaldo() + movimientoDto.getValor());
+                movimientoDto.setSaldo(movimientoDto.getSaldo().add(movimientoDto.getValor()));
             }else{
-                if(movimientoDto.getSaldo() == 0){
+                if(movimientoDto.getSaldo().equals(BigDecimal.ZERO)){
                     throw new ApiException("Saldo no Disponible",HttpStatus.OK);
                 }
-                movimientoDto.setSaldo(movimientoDto.getSaldo() - movimientoDto.getValor());
+                movimientoDto.setSaldo(movimientoDto.getSaldo().subtract(movimientoDto.getValor()));
             }
             MovimientoEntity movimientoEntity = modelMapper.map(movimientoDto, MovimientoEntity.class);
             movimientoEntity.setCuenta(cuentaEntity.get());

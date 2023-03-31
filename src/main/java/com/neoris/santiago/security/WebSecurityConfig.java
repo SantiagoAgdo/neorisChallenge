@@ -2,7 +2,7 @@ package com.neoris.santiago.security;
 
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import static com.neoris.santiago.NeorisChallengeApplication.pass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @AllArgsConstructor
 public class WebSecurityConfig {
 
-    private static  final String pass = "admin";
+
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {

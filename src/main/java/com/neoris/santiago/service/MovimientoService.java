@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface MovimientoService {
 
-    void crearMovimiento(MovimientoEntity movimientoDto) throws ApiException;
+    void crearMovimiento(MovimientoDto movimientoDto) throws ApiException;
 
     Optional<MovimientoEntity> obtenerMovimientoPorId(Integer idMovimiento) throws ApiException;
 
