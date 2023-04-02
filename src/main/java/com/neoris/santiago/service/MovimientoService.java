@@ -13,7 +13,7 @@ public interface MovimientoService {
 
     void crearMovimiento(MovimientoDto movimientoDto) throws ApiException;
 
-    Optional<MovimientoEntity> obtenerMovimientoPorId(Integer idMovimiento) throws ApiException;
+    MovimientoDto obtenerMovimientoPorId(Integer idMovimiento) throws ApiException;
 
     boolean editarMovimiento(MovimientoDto movimientoDto) throws ApiException;
 

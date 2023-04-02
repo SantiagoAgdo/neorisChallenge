@@ -61,10 +61,10 @@ public class MovimientoServiceImpl implements MovimientoService {
     }
 
     @Override
-    public Optional<MovimientoEntity> obtenerMovimientoPorId(Integer idMovimiento) throws ApiException {
-        Optional<MovimientoEntity> movimientoEntity = movimientosRepository.findById(idMovimiento);
-        if(movimientoEntity.isPresent()){
-            return movimientoEntity;
+    public MovimientoDto obtenerMovimientoPorId(Integer idMovimiento) throws ApiException {
+        MovimientoEntity movimientoEntity = movimientosRepository.findById(idMovimiento).get();
+        if(movimientoEntity != null){
+            return modelMapper.map(movimientoEntity, MovimientoDto.class);
         }else{
             throw new ApiException("Movimiento con ID no encontrado - id: " + idMovimiento,HttpStatus.OK);
         }

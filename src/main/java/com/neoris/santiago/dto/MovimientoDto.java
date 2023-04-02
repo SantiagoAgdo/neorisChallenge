@@ -18,7 +18,7 @@ public class MovimientoDto implements Serializable {
     private Integer id;
 
     @NotNull()
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fecha;
 
     private String tipoMovimiento;

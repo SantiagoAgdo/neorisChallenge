@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @RestController
@@ -28,6 +29,9 @@ public class MovimientoController {
             movimientoService.crearMovimiento(movimiento);
             return  new ResponseEntity<>("Movimiento Creado con exito", HttpStatus.OK);
         }catch (Exception e){
+            if (movimiento.getTipoMovimiento().equals("debito") && movimiento.getSaldo().equals(BigDecimal.ZERO)){
+                return new ResponseEntity<>("Saldo no disponible", HttpStatus.CONFLICT);
+            }
             return new ResponseEntity<>("Error en la creacion de movimiento, vuelva a intentarlo", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
