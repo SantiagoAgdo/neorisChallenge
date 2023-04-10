@@ -92,7 +92,7 @@ class ClienteControllerTest {
     }
 
     @Test
-    public void validacionAutenticacionServiciosCorrecta() throws Exception {
+    void validacionAutenticacionServiciosCorrecta() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/clientes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(clienteDto)))
@@ -110,7 +110,7 @@ class ClienteControllerTest {
     }
 
     @Test
-    public void creacionCorrectaDeCliente() {
+    void creacionCorrectaDeCliente() {
         ClienteService cs = mock(ClienteService.class);
         doNothing().when(cs).crearCliente(clienteDto);
         cs.crearCliente(clienteDto);
@@ -118,7 +118,7 @@ class ClienteControllerTest {
     }
 
     @Test
-    public void validacionErrorEnCreacionDeUsuario() {
+    void validacionErrorEnCreacionDeUsuario() {
         clienteDto.setEstado(null);
         ClienteService cs = mock(ClienteService.class);
         doNothing().when(cs).crearCliente(clienteDto);

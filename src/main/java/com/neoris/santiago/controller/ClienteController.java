@@ -19,7 +19,7 @@ public class ClienteController {
 
 
     @PostMapping
-    public ResponseEntity<?> saveClient(@Valid @RequestBody ClienteDto cliente, BindingResult bindingResult) {
+    public ResponseEntity saveClient(@Valid @RequestBody ClienteDto cliente, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("Error en la peticion", HttpStatus.BAD_REQUEST);
         }
@@ -32,7 +32,7 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCliente(@PathVariable("id") Integer id) {
+    public ResponseEntity getCliente(@PathVariable("id") Integer id) {
         try{
             return new ResponseEntity<>(clienteService.obtenerClientePorId(id), HttpStatus.OK);
         }catch (Exception e){
@@ -41,7 +41,7 @@ public class ClienteController {
     }
 
     @PutMapping
-    public ResponseEntity<?> putClient(@Valid @RequestBody ClienteDto cliente, BindingResult bindingResult) {
+    public ResponseEntity putClient(@Valid @RequestBody ClienteDto cliente, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("error en la peticion", HttpStatus.BAD_REQUEST);
         }
@@ -50,7 +50,7 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCliente(@PathVariable Integer id) {
+    public ResponseEntity deleteCliente(@PathVariable Integer id) {
         if (clienteService.eliminarCliente(id)){
             return new ResponseEntity<>("Cliente eliminada con exito", HttpStatus.OK);
         }else{
